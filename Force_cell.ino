@@ -1,5 +1,6 @@
 #include <ADS1220_WE.h>
 #include <SPI.h>
+#include <math.h>
 
 #define ADS1220_CS_PIN    7 
 #define ADS1220_DRDY_PIN  6 
@@ -7,9 +8,7 @@
 ADS1220_WE ads = ADS1220_WE(ADS1220_CS_PIN, ADS1220_DRDY_PIN);
 
 unsigned long previousMillis = 0;  
-const long interval = 0.6;  // Interval in milliseconds
-const int numMeasurements = 100; // Number of measurements to average
-float off = 0.0;
+const long interval = 0.67;  // Interval in milliseconds
 
 void setup() {
   Serial.begin(115200);
@@ -24,19 +23,7 @@ void setup() {
   ads.setVRefValue_V(5.0);  
   ads.setLowSidePowerSwitch(ADS1220_SWITCH);
   ads.setDataRate(1500);
-  ads.setFIRFilter(ADS1220_50HZ_60HZ);
-  // Initialize offset calculation
-  float sum = 0.0;
-  for (int i = 0; i < numMeasurements; i++) {
-    float voltage = ads.getVoltage_mV();
-    sum += 116.279 * voltage;
-  }
 
-  off = sum / numMeasurements;
-
-  // Print the calculated offset for debugging
-  Serial.print("Calculated offset: ");
-  Serial.println(off, 3);
 }
 
 void loop() {
@@ -45,9 +32,9 @@ void loop() {
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
 
-    // Apply the adjustment to the current reading
-    float result = 116.279* ads.getVoltage_mV() -off;
-    Serial.println(result, 3);
-   // Serial.println(off);
+    float result = ads.getVoltage_mV();
+   // float weight = abs(result);
+    Serial.println(result,3);
+
   }
 }
