@@ -1,2 +1,2 @@
 # tractor_scale
-Es soll ein Zugmessgerät entwickelt und gebaut werden, das zur Datenerhebung von Kletter- und Highlinematerial dienen soll. 
+A tension measuring device is to be developed and built for data collection of climbing and highline equipment. It is a replica of the original Line Scale.
